@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="musicGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e11d48" />
+      <stop offset="100%" stop-color="#9333ea" />
+    </linearGradient>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#4c0519" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Background squircle matching Jason Canning Portal branding -->
+  <rect width="512" height="512" rx="115" fill="url(#musicGrad)" />
+
+  <!-- Inner subtle border for crisp contrast on light/dark browser tabs -->
+  <rect width="504" height="504" x="4" y="4" rx="111" fill="none" stroke="#ffffff" stroke-width="8" stroke-opacity="0.2" />
+
+  <!-- FontAwesome Music Glyph in pure white with soft elevation -->
+  <g transform="translate(100, 95) scale(0.61)" filter="url(#subtleShadow)">
+    <path fill="#ffffff" d="M499.5 20.1c-7.9-6.3-18.7-8-28.1-4.3L183.4 131.8c-14.7 5.9-24.4 20.2-24.4 36.1v236.4c-15.6-8.7-35.8-13.8-58-13.8-49.7 0-90 28.7-90 64s40.3 64 90 64 90-28.7 90-64V246.5l256-102.4v184.2c-15.6-8.7-35.8-13.8-58-13.8-49.7 0-90 28.7-90 64s40.3 64 90 64 90-28.7 90-64V64c0-18.7-10.7-35.8-27.5-43.9z"/>
+  </g>
+</svg>

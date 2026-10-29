@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Database &bull; Jason Canning</title>
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/music/favicon.svg">
+  <link rel="alternate icon" type="image/x-icon" href="/music/favicon.ico">
+  <meta name="theme-color" content="#e11d48">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fff1f2',
+              100: '#ffe4e6',
+              200: '#fecdd3',
+              300: '#fda4af',
+              400: '#fb7185',
+              500: '#f43f5e',
+              600: '#e11d48',
+              700: '#be123c',
+              800: '#9f1239',
+              900: '#881337',
+              950: '#4c0519',
+            }
+          }
+        }
+      }
+    };
+    (function() {
+      const theme = localStorage.getItem('jc_portal_theme') || 'light';
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3, .font-heading { font-family: 'Outfit', sans-serif; }
+
+    /* Custom Glassmorphism styles matching Portal */
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .dark .glass-nav {
+      background: rgba(15, 23, 42, 0.88);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
+    }
+    .glass-card:hover {
+      border-color: rgba(244, 63, 94, 0.4);
+      box-shadow: 0 12px 28px -4px rgba(244, 63, 94, 0.1);
+    }
+    .dark .glass-card {
+      background: rgba(30, 41, 59, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      box-shadow: none;
+    }
+    .dark .glass-card:hover {
+      background: rgba(30, 41, 59, 0.85);
+      border-color: rgba(244, 63, 94, 0.4);
+      box-shadow: 0 16px 30px -5px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Vinyl record disc effect */
+    .vinyl-grooves {
+      background: radial-gradient(circle, #2d3748 18%, #1a202c 19%, #1a202c 25%, #2d3748 26%, #2d3748 35%, #1a202c 36%, #1a202c 45%, #2d3748 46%, #1a202c 55%, #2d3748 56%, #1a202c 70%, #0f172a 100%);
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.4);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(156, 163, 175, 0.7);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col relative overflow-x-hidden selection:bg-rose-500 selection:text-white transition-colors duration-200">
+
+  <!-- Ambient background glow elements -->
+  <div class="fixed top-0 left-1/3 w-[600px] h-[350px] bg-rose-500/10 dark:bg-rose-600/15 rounded-full blur-[140px] pointer-events-none -z-10"></div>
+  <div class="fixed bottom-0 right-1/4 w-[500px] h-[350px] bg-purple-500/10 dark:bg-purple-600/10 rounded-full blur-[140px] pointer-events-none -z-10"></div>
+
+  <!-- Header / Navigation -->
+  <header class="glass-nav sticky top-0 z-30 px-4 sm:px-8 py-3.5 flex items-center justify-between transition-colors duration-200">
+    <div class="flex items-center gap-3 sm:gap-4">
+      <!-- Portal Back Link -->
+      <a href="/" title="Return to Portal Dashboard" class="w-10 h-10 rounded-xl bg-slate-200/80 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-colors shadow-sm">
+        <i class="fa-solid fa-shapes text-sm"></i>
+      </a>
+
+      <!-- App Title & Icon -->
+      <div class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-purple-600 text-white flex items-center justify-center shadow-lg shadow-rose-500/25 text-lg">
+          <i class="fa-solid fa-music text-sm"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-bold text-base leading-tight tracking-tight text-slate-900 dark:text-white">
+              Music Database
+            </h1>
+            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-700 border border-rose-500/20 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/30">
+              FLAC &bull; Hi-Res &bull; MP3
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 font-mono flex items-center gap-2">
+            <span>jasoncanning.uk/music</span>
+            <span class="hidden sm:inline text-slate-300 dark:text-slate-700">&bull;</span>
+            <span id="header-stats-pill" class="hidden sm:inline text-rose-600 dark:text-rose-400 font-medium">Loading library...</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Controls: Global Search, Theme Toggle, User Profile -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <!-- Live Search Trigger (Desktop) -->
+      <div class="relative hidden md:block w-72">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+        <input 
+          type="text" 
+          id="global-search-input" 
+          placeholder="Search tracks, albums, artists..." 
+          class="w-full pl-8 pr-8 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs focus:outline-none focus:border-rose-500 dark:focus:border-rose-400 focus:ring-2 focus:ring-rose-500/20 text-slate-800 dark:text-slate-200 transition-all"
+        />
+        <button id="global-search-clear" onclick="clearSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Theme Switcher -->
+      <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl bg-white/80 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors shadow-sm" title="Toggle theme">
+        <i class="fa-solid fa-sun text-xs hidden dark:block"></i>
+        <i class="fa-solid fa-moon text-xs block dark:hidden"></i>
+      </button>
+
+      <!-- User Profile Badge -->
+      <div id="user-badge" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/80 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-xs font-semibold text-slate-700 dark:text-slate-300">
+        <div class="w-5 h-5 rounded-full bg-rose-500/20 text-rose-600 dark:text-rose-400 flex items-center justify-center text-[10px] font-bold">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <span id="user-display-name">Jason</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Search Bar (Visible on mobile screens) -->
+  <div class="p-3 bg-white/90 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800 md:hidden sticky top-[65px] z-20">
+    <div class="relative">
+      <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+      <input 
+        type="text" 
+        id="mobile-search-input" 
+        placeholder="Search tracks, albums, artists..." 
+        class="w-full pl-8 pr-8 py-2 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:outline-none focus:border-rose-500 text-slate-800 dark:text-slate-200"
+      />
+      <button id="mobile-search-clear" onclick="clearSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
+
+    <!-- Overview Statistics Banner -->
+    <div id="stats-banner" class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+      <!-- Total Artists -->
+      <div class="glass-card rounded-2xl p-4 flex items-center gap-3.5 transition-all">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-purple-500 to-indigo-600 text-white flex items-center justify-center shadow-md shadow-purple-500/20 text-lg">
+          <i class="fa-solid fa-user-group"></i>
+        </div>
+        <div>
+          <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Artists</p>
+          <p id="stat-artists" class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white leading-tight">--</p>
+        </div>
+      </div>
+
+      <!-- Total Albums -->
+      <div class="glass-card rounded-2xl p-4 flex items-center gap-3.5 transition-all">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-rose-500 to-pink-600 text-white flex items-center justify-center shadow-md shadow-rose-500/20 text-lg">
+          <i class="fa-solid fa-compact-disc"></i>
+        </div>
+        <div>
+          <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Albums</p>
+          <p id="stat-albums" class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white leading-tight">--</p>
+        </div>
+      </div>
+
+      <!-- Total Tracks -->
+      <div class="glass-card rounded-2xl p-4 flex items-center gap-3.5 transition-all">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-600 text-white flex items-center justify-center shadow-md shadow-amber-500/20 text-lg">
+          <i class="fa-solid fa-music"></i>
+        </div>
+        <div>
+          <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tracks</p>
+          <p id="stat-tracks" class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white leading-tight">--</p>
+        </div>
+      </div>
+
+      <!-- Total Storage -->
+      <div class="glass-card rounded-2xl p-4 flex items-center gap-3.5 transition-all">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 text-lg">
+          <i class="fa-solid fa-hard-drive"></i>
+        </div>
+        <div>
+          <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Library Size</p>
+          <p id="stat-size" class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white leading-tight">-- GB</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs & Toolbar -->
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-3">
+      <!-- Tabs -->
+      <div class="flex items-center gap-1.5 p-1 bg-slate-200/80 dark:bg-slate-900 rounded-xl text-xs font-semibold">
+        <button onclick="switchTab('albums')" id="tab-btn-albums" class="tab-btn px-4 py-2 rounded-lg transition-all flex items-center gap-2 bg-white dark:bg-slate-800 text-rose-600 dark:text-rose-400 shadow-sm">
+          <i class="fa-solid fa-compact-disc"></i>
+          <span>Albums</span>
+          <span id="tab-count-albums" class="px-1.5 py-0.2 rounded-md bg-rose-500/10 dark:bg-rose-500/20 text-[10px]"></span>
+        </button>
+
+        <button onclick="switchTab('tracks')" id="tab-btn-tracks" class="tab-btn px-4 py-2 rounded-lg transition-all flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+          <i class="fa-solid fa-music"></i>
+          <span>Tracks</span>
+          <span id="tab-count-tracks" class="px-1.5 py-0.2 rounded-md bg-slate-300 dark:bg-slate-800 text-[10px]"></span>
+        </button>
+
+        <button onclick="switchTab('artists')" id="tab-btn-artists" class="tab-btn px-4 py-2 rounded-lg transition-all flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+          <i class="fa-solid fa-microphone-lines"></i>
+          <span>Artists</span>
+          <span id="tab-count-artists" class="px-1.5 py-0.2 rounded-md bg-slate-300 dark:bg-slate-800 text-[10px]"></span>
+        </button>
+
+        <button onclick="switchTab('insights')" id="tab-btn-insights" class="tab-btn px-4 py-2 rounded-lg transition-all flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Insights</span>
+        </button>
+      </div>
+
+      <!-- Filters & Sorting Bar -->
+      <div id="filter-toolbar" class="flex flex-wrap items-center gap-2">
+        <!-- Section Filter -->
+        <select id="filter-section" onchange="onFilterChange()" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 focus:outline-none focus:border-rose-500 shadow-sm">
+          <option value="all">All Sections</option>
+          <option value="hi_res">Hi-Res Library</option>
+          <option value="mp3">MP3 Library</option>
+          <option value="other">Other</option>
+        </select>
+
+        <!-- Quality Filter -->
+        <select id="filter-quality" onchange="onFilterChange()" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 focus:outline-none focus:border-rose-500 shadow-sm">
+          <option value="all">All Qualities</option>
+          <option value="hi_res">Hi-Res (24-bit)</option>
+          <option value="cd">CD (16-bit / 44.1k)</option>
+          <option value="dsd">DSD (Direct Stream)</option>
+          <option value="lossy">Lossy (MP3)</option>
+        </select>
+
+        <!-- Sort Filter -->
+        <select id="filter-sort" onchange="onFilterChange()" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 focus:outline-none focus:border-rose-500 shadow-sm">
+          <option value="title:asc">Title (A &rarr; Z)</option>
+          <option value="title:desc">Title (Z &rarr; A)</option>
+          <option value="artist:asc">Artist (A &rarr; Z)</option>
+          <option value="tracks:desc">Most Tracks</option>
+          <option value="size:desc">Largest Size</option>
+          <option value="newest:desc">Recently Added</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Active Search Chip & Status Bar -->
+    <div id="active-filter-strip" class="hidden items-center justify-between bg-rose-500/10 dark:bg-rose-500/15 border border-rose-500/20 rounded-xl px-4 py-2.5 text-xs text-rose-800 dark:text-rose-200">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-filter text-rose-600 dark:text-rose-400"></i>
+        <span>Filtered results for: <strong id="active-search-term" class="font-bold"></strong></span>
+        <span id="active-search-count" class="px-2 py-0.5 rounded-full bg-rose-500/20 text-[10px] font-mono font-bold"></span>
+      </div>
+      <button onclick="clearSearch()" class="hover:underline font-semibold flex items-center gap-1">
+        <span>Clear filters</span>
+        <i class="fa-solid fa-xmark text-[10px]"></i>
+      </button>
+    </div>
+
+    <!-- TAB 1: ALBUMS VIEW -->
+    <section id="view-albums" class="flex flex-col gap-6">
+      <!-- Albums Grid -->
+      <div id="albums-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Pagination -->
+      <div id="albums-pagination" class="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-4">
+        <span id="albums-page-info" class="text-xs text-slate-500 dark:text-slate-400 font-mono">Showing 0 of 0 albums</span>
+        <div class="flex items-center gap-2">
+          <button id="albums-prev-btn" onclick="changePage('albums', -1)" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800">
+            <i class="fa-solid fa-chevron-left mr-1"></i> Prev
+          </button>
+          <span id="albums-page-number" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-rose-500/10 text-rose-700 dark:text-rose-300 font-mono">1</span>
+          <button id="albums-next-btn" onclick="changePage('albums', 1)" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800">
+            Next <i class="fa-solid fa-chevron-right ml-1"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: TRACKS VIEW -->
+    <section id="view-tracks" class="hidden flex flex-col gap-4">
+      <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 uppercase font-semibold text-[10px] tracking-wider">
+              <tr>
+                <th class="py-3 px-4 w-12 text-center">#</th>
+                <th class="py-3 px-4">Title</th>
+                <th class="py-3 px-4">Artist</th>
+                <th class="py-3 px-4">Album</th>
+                <th class="py-3 px-4 text-center">Quality</th>
+                <th class="py-3 px-4 text-center">Format</th>
+                <th class="py-3 px-4 text-right">Size</th>
+                <th class="py-3 px-4 text-right">Drive</th>
+              </tr>
+            </thead>
+            <tbody id="tracks-table-body" class="divide-y divide-slate-100 dark:divide-slate-800/80">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tracks Pagination -->
+      <div id="tracks-pagination" class="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-4">
+        <span id="tracks-page-info" class="text-xs text-slate-500 dark:text-slate-400 font-mono">Showing 0 of 0 tracks</span>
+        <div class="flex items-center gap-2">
+          <button id="tracks-prev-btn" onclick="changePage('tracks', -1)" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800">
+            <i class="fa-solid fa-chevron-left mr-1"></i> Prev
+          </button>
+          <span id="tracks-page-number" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-rose-500/10 text-rose-700 dark:text-rose-300 font-mono">1</span>
+          <button id="tracks-next-btn" onclick="changePage('tracks', 1)" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800">
+            Next <i class="fa-solid fa-chevron-right ml-1"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: ARTISTS VIEW -->
+    <section id="view-artists" class="hidden flex flex-col gap-6">
+      <!-- Alphabet Quick-jump bar -->
+      <div class="flex items-center gap-1 overflow-x-auto pb-2 p-1.5 bg-slate-200/60 dark:bg-slate-900/60 rounded-xl text-xs font-semibold" id="artists-alpha-bar">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Artists Grid -->
+      <div id="artists-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Artists Pagination -->
+      <div id="artists-pagination" class="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-4">
+        <span id="artists-page-info" class="text-xs text-slate-500 dark:text-slate-400 font-mono">Showing 0 of 0 artists</span>
+        <div class="flex items-center gap-2">
+          <button id="artists-prev-btn" onclick="changePage('artists', -1)" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800">
+            <i class="fa-solid fa-chevron-left mr-1"></i> Prev
+          </button>
+          <span id="artists-page-number" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-rose-500/10 text-rose-700 dark:text-rose-300 font-mono">1</span>
+          <button id="artists-next-btn" onclick="changePage('artists', 1)" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800">
+            Next <i class="fa-solid fa-chevron-right ml-1"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: LIBRARY INSIGHTS -->
+    <section id="view-insights" class="hidden flex flex-col gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Quality Breakdown Card -->
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2 mb-4">
+            <i class="fa-solid fa-sliders text-rose-600 dark:text-rose-400"></i>
+            <span>Audio Quality Breakdown</span>
+          </h3>
+          <div id="insights-qualities-list" class="space-y-3">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Library Section Breakdown Card -->
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2 mb-4">
+            <i class="fa-solid fa-folder-tree text-purple-600 dark:text-purple-400"></i>
+            <span>Library Sections</span>
+          </h3>
+          <div id="insights-sections-list" class="space-y-3">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Format Breakdown Card -->
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2 mb-4">
+            <i class="fa-solid fa-file-audio text-amber-500 dark:text-amber-400"></i>
+            <span>File Formats</span>
+          </h3>
+          <div id="insights-formats-list" class="space-y-3">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Artists by Collection Size -->
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2 mb-4">
+          <i class="fa-solid fa-crown text-amber-500"></i>
+          <span>Top Artists in Library</span>
+        </h3>
+        <div id="insights-top-artists-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Album Detail Modal -->
+  <div id="album-modal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="relative w-full max-w-4xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden my-auto max-h-[90vh] flex flex-col">
+      <!-- Modal Header -->
+      <div class="relative p-6 sm:p-8 bg-gradient-to-r from-rose-950 via-slate-900 to-purple-950 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border-b border-white/10">
+        <div class="flex items-center gap-5">
+          <!-- Album Vinyl Icon Container -->
+          <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl vinyl-grooves border-2 border-white/20 shadow-xl flex items-center justify-center shrink-0 relative group">
+            <div class="w-8 h-8 rounded-full bg-rose-600 border-2 border-white/80 flex items-center justify-center shadow-inner">
+              <i class="fa-solid fa-music text-xs text-white"></i>
+            </div>
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2 mb-1.5">
+              <span id="modal-album-quality-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"></span>
+              <span id="modal-album-section-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-white/10 text-white/80"></span>
+            </div>
+            <h2 id="modal-album-title" class="text-xl sm:text-2xl font-bold leading-tight tracking-tight"></h2>
+            <p id="modal-album-artist" class="text-sm sm:text-base text-rose-300 font-medium"></p>
+            <p id="modal-album-meta" class="text-xs text-slate-400 mt-1 font-mono"></p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
+          <a id="modal-album-drive-btn" href="#" target="_blank" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold flex items-center gap-2 shadow-lg shadow-rose-600/30 transition-all">
+            <i class="fa-brands fa-google-drive"></i>
+            <span>Open in Drive</span>
+            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+          </a>
+          <button onclick="closeAlbumModal()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Technical specifications & Extra Files strip -->
+      <div id="modal-album-extras-strip" class="hidden px-6 py-2.5 bg-slate-100 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800 text-xs flex flex-wrap items-center justify-between gap-3 text-slate-600 dark:text-slate-400">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-paperclip text-rose-500"></i>
+          <span>Included Artwork / Booklets:</span>
+          <span id="modal-album-extras-text" class="font-mono text-slate-800 dark:text-slate-200"></span>
+        </div>
+        <div id="modal-album-path" class="font-mono text-[11px] text-slate-400 truncate max-w-sm"></div>
+      </div>
+
+      <!-- Tracks Table -->
+      <div class="flex-1 overflow-y-auto p-4 sm:p-6">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 flex items-center justify-between">
+          <span>Tracklist (<span id="modal-tracks-count">0</span> tracks)</span>
+          <span class="text-[11px] font-normal lowercase font-mono">Click Drive to play/stream in Google Drive</span>
+        </h3>
+        <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase font-semibold text-[10px] tracking-wider">
+              <tr>
+                <th class="py-2.5 px-3 w-10 text-center">#</th>
+                <th class="py-2.5 px-3">Title</th>
+                <th class="py-2.5 px-3">Artist</th>
+                <th class="py-2.5 px-3 text-center">Format</th>
+                <th class="py-2.5 px-3 text-right">Size</th>
+                <th class="py-2.5 px-3 text-right w-24">Action</th>
+              </tr>
+            </thead>
+            <tbody id="modal-tracks-body" class="divide-y divide-slate-100 dark:divide-slate-800">
+              <!-- Tracks rendered here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto py-6 border-t border-slate-200 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-500 font-mono">
+    <div class="flex items-center justify-center gap-3">
+      <span>Jason Canning Music Database &bull; Proxmox CT 101</span>
+      <span>&bull;</span>
+      <a href="/" class="text-rose-600 dark:text-rose-400 hover:underline">Portal Dashboard</a>
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script>
+    // State management
+    const API_BASE = window.location.pathname.startsWith('/music') ? '/music/api' : '/api';
+
+    const state = {
+      activeTab: 'albums',
+      query: '',
+      section: 'all',
+      quality: 'all',
+      sort: 'title',
+      order: 'asc',
+      artistId: null,
+      artistLetter: 'ALL',
+      pages: {
+        albums: 1,
+        tracks: 1,
+        artists: 1
+      },
+      limits: {
+        albums: 24,
+        tracks: 50,
+        artists: 36
+      },
+      stats: null,
+      searchDebounceTimer: null
+    };
+
+    // Quality Badge styling helper
+    function getQualityBadge(quality, bitDepth, sampleRate) {
+      const q = (quality || '').toLowerCase();
+      let spec = '';
+      if (bitDepth && sampleRate) {
+        const srKhz = (sampleRate / 1000).toFixed(sampleRate % 1000 === 0 ? 0 : 1);
+        spec = `${bitDepth}-bit/${srKhz}kHz`;
+      }
+
+      if (q === 'hi_res') {
+        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30">
+          <i class="fa-solid fa-bolt mr-1 text-amber-500"></i>Hi-Res ${spec ? `&bull; ${spec}` : ''}
+        </span>`;
+      } else if (q === 'cd') {
+        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-500/30">
+          <i class="fa-solid fa-compact-disc mr-1"></i>CD ${spec || '16-bit/44.1k'}
+        </span>`;
+      } else if (q === 'dsd') {
+        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+          <i class="fa-solid fa-wave-square mr-1"></i>DSD
+        </span>`;
+      } else {
+        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-500/15 text-slate-700 dark:text-slate-300 border border-slate-500/30">
+          MP3
+        </span>`;
+      }
+    }
+
+    // Format bytes helper
+    function formatBytes(bytes) {
+      if (!bytes || bytes === 0) return '0 MB';
+      const num = Number(bytes);
+      if (num >= 1024 * 1024 * 1024) {
+        return (num / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+      }
+      return (num / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    // Theme toggler
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('jc_portal_theme', isDark ? 'dark' : 'light');
+    }
+
+    // Tab switcher
+    function switchTab(tab) {
+      state.activeTab = tab;
+      ['albums', 'tracks', 'artists', 'insights'].forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        const view = document.getElementById(`view-${t}`);
+        if (t === tab) {
+          btn.className = 'tab-btn px-4 py-2 rounded-lg transition-all flex items-center gap-2 bg-white dark:bg-slate-800 text-rose-600 dark:text-rose-400 shadow-sm font-semibold';
+          view.classList.remove('hidden');
+        } else {
+          btn.className = 'tab-btn px-4 py-2 rounded-lg transition-all flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium';
+          view.classList.add('hidden');
+        }
+      });
+
+      // Show/hide filter toolbar based on active tab
+      const toolbar = document.getElementById('filter-toolbar');
+      if (tab === 'insights') {
+        toolbar.classList.add('hidden');
+        loadInsights();
+      } else {
+        toolbar.classList.remove('hidden');
+        loadDataForCurrentTab();
+      }
+    }
+
+    // Fetch initial user and stats
+    async function init() {
+      try {
+        // User info
+        const userRes = await fetch(`${API_BASE}/user`);
+        if (userRes.ok) {
+          const userData = await userRes.json();
+          document.getElementById('user-display-name').textContent = userData.displayName || userData.username || 'Jason';
+        }
+
+        // Stats
+        const statsRes = await fetch(`${API_BASE}/stats`);
+        if (statsRes.ok) {
+          const data = await statsRes.json();
+          state.stats = data;
+          renderHeaderStats(data);
+        }
+      } catch (e) {
+        console.warn('Init error:', e);
+      }
+
+      setupAlphabetBar();
+      setupSearchInputs();
+      loadAlbums();
+    }
+
+    function renderHeaderStats(data) {
+      const counts = data.counts || {};
+      document.getElementById('stat-artists').textContent = Number(counts.artists_count || 0).toLocaleString();
+      document.getElementById('stat-albums').textContent = Number(counts.albums_count || 0).toLocaleString();
+      document.getElementById('stat-tracks').textContent = Number(counts.tracks_count || 0).toLocaleString();
+      document.getElementById('stat-size').textContent = formatBytes(counts.total_size_bytes);
+
+      document.getElementById('tab-count-albums').textContent = Number(counts.albums_count || 0).toLocaleString();
+      document.getElementById('tab-count-tracks').textContent = Number(counts.tracks_count || 0).toLocaleString();
+      document.getElementById('tab-count-artists').textContent = Number(counts.artists_count || 0).toLocaleString();
+
+      document.getElementById('header-stats-pill').textContent = 
+        `${Number(counts.albums_count || 0).toLocaleString()} Albums &bull; ${Number(counts.tracks_count || 0).toLocaleString()} Tracks`;
+    }
+
+    // Search input handlers
+    function setupSearchInputs() {
+      const desktop = document.getElementById('global-search-input');
+      const mobile = document.getElementById('mobile-search-input');
+
+      const handleInput = (val) => {
+        state.query = val.trim();
+        desktop.value = val;
+        mobile.value = val;
+
+        const clearBtnD = document.getElementById('global-search-clear');
+        const clearBtnM = document.getElementById('mobile-search-clear');
+        if (state.query) {
+          clearBtnD.classList.remove('hidden');
+          clearBtnM.classList.remove('hidden');
+        } else {
+          clearBtnD.classList.add('hidden');
+          clearBtnM.classList.add('hidden');
+        }
+
+        clearTimeout(state.searchDebounceTimer);
+        state.searchDebounceTimer = setTimeout(() => {
+          state.pages.albums = 1;
+          state.pages.tracks = 1;
+          state.pages.artists = 1;
+          updateFilterStrip();
+          loadDataForCurrentTab();
+        }, 280);
+      };
+
+      desktop.addEventListener('input', (e) => handleInput(e.target.value));
+      mobile.addEventListener('input', (e) => handleInput(e.target.value));
+    }
+
+    function clearSearch() {
+      state.query = '';
+      state.artistId = null;
+      document.getElementById('global-search-input').value = '';
+      document.getElementById('mobile-search-input').value = '';
+      document.getElementById('global-search-clear').classList.add('hidden');
+      document.getElementById('mobile-search-clear').classList.add('hidden');
+      document.getElementById('filter-section').value = 'all';
+      document.getElementById('filter-quality').value = 'all';
+      state.section = 'all';
+      state.quality = 'all';
+      updateFilterStrip();
+      loadDataForCurrentTab();
+    }
+
+    function updateFilterStrip() {
+      const strip = document.getElementById('active-filter-strip');
+      const isFiltered = Boolean(state.query || state.artistId || state.section !== 'all' || state.quality !== 'all');
+      if (isFiltered) {
+        strip.classList.remove('hidden');
+        strip.classList.add('flex');
+        let filterDesc = [];
+        if (state.query) filterDesc.push(`"${state.query}"`);
+        if (state.section !== 'all') filterDesc.push(`Section: ${state.section}`);
+        if (state.quality !== 'all') filterDesc.push(`Quality: ${state.quality}`);
+        document.getElementById('active-search-term').textContent = filterDesc.join(', ') || 'Active Filter';
+      } else {
+        strip.classList.add('hidden');
+        strip.classList.remove('flex');
+      }
+    }
+
+    function onFilterChange() {
+      state.section = document.getElementById('filter-section').value;
+      state.quality = document.getElementById('filter-quality').value;
+      const sortVal = document.getElementById('filter-sort').value.split(':');
+      state.sort = sortVal[0];
+      state.order = sortVal[1] || 'asc';
+
+      state.pages.albums = 1;
+      state.pages.tracks = 1;
+      state.pages.artists = 1;
+      updateFilterStrip();
+      loadDataForCurrentTab();
+    }
+
+    function loadDataForCurrentTab() {
+      if (state.activeTab === 'albums') loadAlbums();
+      else if (state.activeTab === 'tracks') loadTracks();
+      else if (state.activeTab === 'artists') loadArtists();
+      else if (state.activeTab === 'insights') loadInsights();
+    }
+
+    function changePage(type, delta) {
+      state.pages[type] = Math.max(1, (state.pages[type] || 1) + delta);
+      if (type === 'albums') loadAlbums();
+      else if (type === 'tracks') loadTracks();
+      else if (type === 'artists') loadArtists();
+    }
+
+    // 1. ALBUMS FETCHER & RENDERER
+    async function loadAlbums() {
+      const grid = document.getElementById('albums-grid');
+      grid.innerHTML = `
+        <div class="col-span-full py-12 text-center text-slate-400">
+          <i class="fa-solid fa-circle-notch fa-spin text-2xl text-rose-500 mb-2"></i>
+          <p class="text-xs font-mono">Loading albums...</p>
+        </div>
+      `;
+
+      const params = new URLSearchParams({
+        page: state.pages.albums,
+        limit: state.limits.albums,
+        q: state.query,
+        section: state.section,
+        quality: state.quality,
+        sort: state.sort,
+        order: state.order
+      });
+      if (state.artistId) params.append('artist_id', state.artistId);
+
+      try {
+        const res = await fetch(`${API_BASE}/albums?${params.toString()}`);
+        const data = await res.json();
+        const albums = data.albums || [];
+        const pag = data.pagination || { page: 1, total: 0, totalPages: 1 };
+
+        // Update page controls
+        document.getElementById('albums-page-number').textContent = pag.page;
+        document.getElementById('albums-prev-btn').disabled = pag.page <= 1;
+        document.getElementById('albums-next-btn').disabled = pag.page >= pag.totalPages;
+        const startItem = (pag.page - 1) * state.limits.albums + 1;
+        const endItem = Math.min(pag.page * state.limits.albums, pag.total);
+        document.getElementById('albums-page-info').textContent = 
+          pag.total > 0 ? `Showing ${startItem}–${endItem} of ${pag.total.toLocaleString()} albums` : '0 albums found';
+
+        if (albums.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full py-16 text-center text-slate-400 glass-card rounded-2xl p-8">
+              <i class="fa-solid fa-compact-disc text-4xl mb-3 text-slate-300 dark:text-slate-700"></i>
+              <p class="text-sm font-semibold text-slate-600 dark:text-slate-300">No albums matched your criteria</p>
+              <p class="text-xs text-slate-400 mt-1">Try clearing filters or searching for another artist or title.</p>
+              <button onclick="clearSearch()" class="mt-4 px-4 py-2 bg-rose-600 text-white rounded-xl text-xs font-semibold hover:bg-rose-500 transition-colors">
+                Clear all filters
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = albums.map(a => {
+          const driveBtn = a.drive_folder_id 
+            ? `<a href="https://drive.google.com/drive/folders/${a.drive_folder_id}" target="_blank" onclick="event.stopPropagation()" class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950 text-slate-500 hover:text-rose-600 flex items-center justify-center transition-colors shadow-sm" title="Open album folder in Google Drive">
+                 <i class="fa-brands fa-google-drive text-xs"></i>
+               </a>` 
+            : '';
+
+          return `
+            <div onclick="openAlbumModal(${a.id})" class="glass-card rounded-2xl p-5 flex flex-col justify-between cursor-pointer group transition-all duration-300">
+              <div>
+                <!-- Top Badge & Drive Link -->
+                <div class="flex items-start justify-between gap-2 mb-3">
+                  <div class="flex flex-wrap items-center gap-1.5">
+                    ${getQualityBadge(a.quality, a.bit_depth, a.sample_rate_hz)}
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
+                      ${(a.library_section || '').toUpperCase()}
+                    </span>
+                  </div>
+                  ${driveBtn}
+                </div>
+
+                <!-- Vinyl Centerpiece Placeholder -->
+                <div class="w-full aspect-square rounded-2xl vinyl-grooves border border-white/10 shadow-lg mb-4 flex items-center justify-center relative overflow-hidden group-hover:scale-[1.02] transition-transform">
+                  <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-rose-600 to-purple-600 text-white flex flex-col items-center justify-center shadow-md border-2 border-white/80">
+                    <i class="fa-solid fa-compact-disc text-xl animate-spin" style="animation-duration: 10s;"></i>
+                  </div>
+                  <!-- Floating Track Count Badge -->
+                  <div class="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-md text-white text-[10px] font-mono font-bold">
+                    ${a.track_count || 0} Tracks
+                  </div>
+                </div>
+
+                <!-- Album Metadata -->
+                <h4 class="font-bold text-sm text-slate-900 dark:text-white leading-snug group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors line-clamp-2">
+                  ${a.title}
+                </h4>
+                <p class="text-xs text-rose-600 dark:text-rose-400 font-medium mt-1 truncate" title="${a.artist}">
+                  ${a.artist}
+                </p>
+              </div>
+
+              <!-- Bottom Stats -->
+              <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+                <span>${a.file_format ? a.file_format.toUpperCase() : 'AUDIO'}</span>
+                <span>${formatBytes(a.total_size_bytes)}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+      } catch (err) {
+        console.error('Fetch albums error:', err);
+        grid.innerHTML = `<div class="col-span-full text-center py-8 text-rose-500 text-xs">Failed to load albums. Please verify connection.</div>`;
+      }
+    }
+
+    // 2. TRACKS FETCHER & RENDERER
+    async function loadTracks() {
+      const tbody = document.getElementById('tracks-table-body');
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="8" class="py-12 text-center text-slate-400">
+            <i class="fa-solid fa-circle-notch fa-spin text-xl text-rose-500 mb-2"></i>
+            <p class="text-xs font-mono">Loading tracks...</p>
+          </td>
+        </tr>
+      `;
+
+      const params = new URLSearchParams({
+        page: state.pages.tracks,
+        limit: state.limits.tracks,
+        q: state.query,
+        section: state.section,
+        quality: state.quality,
+        sort: state.sort,
+        order: state.order
+      });
+      if (state.artistId) params.append('artist_id', state.artistId);
+
+      try {
+        const res = await fetch(`${API_BASE}/tracks?${params.toString()}`);
+        const data = await res.json();
+        const tracks = data.tracks || [];
+        const pag = data.pagination || { page: 1, total: 0, totalPages: 1 };
+
+        // Update pagination
+        document.getElementById('tracks-page-number').textContent = pag.page;
+        document.getElementById('tracks-prev-btn').disabled = pag.page <= 1;
+        document.getElementById('tracks-next-btn').disabled = pag.page >= pag.totalPages;
+        const startItem = (pag.page - 1) * state.limits.tracks + 1;
+        const endItem = Math.min(pag.page * state.limits.tracks, pag.total);
+        document.getElementById('tracks-page-info').textContent = 
+          pag.total > 0 ? `Showing ${startItem}–${endItem} of ${pag.total.toLocaleString()} tracks` : '0 tracks found';
+
+        if (tracks.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="8" class="py-12 text-center text-slate-400">No tracks matched your search.</td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = tracks.map(t => {
+          const driveBtn = t.drive_file_id 
+            ? `<a href="https://drive.google.com/file/d/${t.drive_file_id}/view" target="_blank" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 font-semibold text-[11px] transition-colors" title="Play / Open in Google Drive">
+                 <i class="fa-brands fa-google-drive"></i>
+                 <span>Play</span>
+               </a>`
+            : '<span class="text-slate-400 text-[11px]">-</span>';
+
+          return `
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+              <td class="py-2.5 px-4 text-center font-mono text-slate-400">${t.track_number || '-'}</td>
+              <td class="py-2.5 px-4 font-semibold text-slate-900 dark:text-white">
+                ${t.title}
+              </td>
+              <td class="py-2.5 px-4 text-slate-600 dark:text-slate-300">${t.track_artist || t.artist}</td>
+              <td class="py-2.5 px-4">
+                <button onclick="openAlbumModal(${t.album_id})" class="text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:underline text-left truncate max-w-xs">
+                  ${t.album}
+                </button>
+              </td>
+              <td class="py-2.5 px-4 text-center">${getQualityBadge(t.quality)}</td>
+              <td class="py-2.5 px-4 text-center font-mono font-semibold uppercase text-slate-500">${t.file_format}</td>
+              <td class="py-2.5 px-4 text-right font-mono text-slate-500">${formatBytes(t.size_bytes)}</td>
+              <td class="py-2.5 px-4 text-right">${driveBtn}</td>
+            </tr>
+          `;
+        }).join('');
+
+      } catch (err) {
+        console.error('Fetch tracks error:', err);
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-rose-500">Failed to load tracks.</td></tr>`;
+      }
+    }
+
+    // 3. ARTISTS FETCHER & RENDERER
+    function setupAlphabetBar() {
+      const letters = ['ALL', '#', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
+      const bar = document.getElementById('artists-alpha-bar');
+      bar.innerHTML = letters.map(letter => `
+        <button onclick="filterByLetter('${letter}')" id="alpha-btn-${letter}" class="px-2.5 py-1 rounded-lg text-xs font-mono transition-all ${state.artistLetter === letter ? 'bg-rose-600 text-white font-bold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-300 dark:hover:bg-slate-800'}">
+          ${letter}
+        </button>
+      `).join('');
+    }
+
+    function filterByLetter(letter) {
+      state.artistLetter = letter;
+      state.pages.artists = 1;
+      setupAlphabetBar();
+      loadArtists();
+    }
+
+    async function loadArtists() {
+      const grid = document.getElementById('artists-grid');
+      grid.innerHTML = `
+        <div class="col-span-full py-12 text-center text-slate-400">
+          <i class="fa-solid fa-circle-notch fa-spin text-xl text-rose-500 mb-2"></i>
+          <p class="text-xs font-mono">Loading artists...</p>
+        </div>
+      `;
+
+      const params = new URLSearchParams({
+        page: state.pages.artists,
+        limit: state.limits.artists,
+        q: state.query,
+        letter: state.artistLetter,
+        sort: state.sort,
+        order: state.order
+      });
+
+      try {
+        const res = await fetch(`${API_BASE}/artists?${params.toString()}`);
+        const data = await res.json();
+        const artists = data.artists || [];
+        const pag = data.pagination || { page: 1, total: 0, totalPages: 1 };
+
+        document.getElementById('artists-page-number').textContent = pag.page;
+        document.getElementById('artists-prev-btn').disabled = pag.page <= 1;
+        document.getElementById('artists-next-btn').disabled = pag.page >= pag.totalPages;
+        const startItem = (pag.page - 1) * state.limits.artists + 1;
+        const endItem = Math.min(pag.page * state.limits.artists, pag.total);
+        document.getElementById('artists-page-info').textContent = 
+          pag.total > 0 ? `Showing ${startItem}–${endItem} of ${pag.total.toLocaleString()} artists` : '0 artists found';
+
+        if (artists.length === 0) {
+          grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400">No artists found for this selection.</div>`;
+          return;
+        }
+
+        grid.innerHTML = artists.map(ar => `
+          <div onclick="filterByArtist(${ar.id}, '${escapeHtml(ar.name)}')" class="glass-card rounded-2xl p-5 flex items-center justify-between cursor-pointer group transition-all duration-300">
+            <div class="flex items-center gap-3.5 overflow-hidden">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-purple-500 to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-md group-hover:scale-105 transition-transform text-lg">
+                <i class="fa-solid fa-microphone-lines"></i>
+              </div>
+              <div class="truncate">
+                <h4 class="font-bold text-sm text-slate-900 dark:text-white truncate group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
+                  ${ar.name}
+                </h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
+                  ${ar.album_count} Albums &bull; ${ar.track_count} Tracks
+                </p>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:translate-x-1 group-hover:text-rose-500 transition-all shrink-0 ml-2"></i>
+          </div>
+        `).join('');
+
+      } catch (err) {
+        console.error('Fetch artists error:', err);
+        grid.innerHTML = `<div class="col-span-full text-center py-8 text-rose-500">Failed to load artists.</div>`;
+      }
+    }
+
+    function filterByArtist(id, name) {
+      state.artistId = id;
+      state.activeTab = 'albums';
+      switchTab('albums');
+      document.getElementById('active-search-term').textContent = `Artist: ${name}`;
+      document.getElementById('active-filter-strip').classList.remove('hidden');
+      document.getElementById('active-filter-strip').classList.add('flex');
+      loadAlbums();
+    }
+
+    // 4. INSIGHTS VIEW
+    function loadInsights() {
+      if (!state.stats) return;
+      const { qualities, sections, formats, topArtists } = state.stats;
+
+      // Qualities
+      document.getElementById('insights-qualities-list').innerHTML = (qualities || []).map(q => `
+        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+          <div>
+            <div class="flex items-center gap-2">
+              ${getQualityBadge(q.quality)}
+              <span class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase">${q.quality}</span>
+            </div>
+            <span class="text-[11px] text-slate-400 font-mono">${Number(q.track_count || 0).toLocaleString()} tracks</span>
+          </div>
+          <div class="text-right">
+            <span class="text-sm font-bold text-slate-900 dark:text-white font-mono">${q.count}</span>
+            <span class="text-[11px] text-slate-400 block font-mono">${formatBytes(q.size_bytes)}</span>
+          </div>
+        </div>
+      `).join('');
+
+      // Sections
+      document.getElementById('insights-sections-list').innerHTML = (sections || []).map(s => `
+        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+          <div>
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase">${s.library_section.replace('_', ' ')}</span>
+            <span class="text-[11px] text-slate-400 block font-mono">${Number(s.track_count || 0).toLocaleString()} tracks</span>
+          </div>
+          <div class="text-right">
+            <span class="text-sm font-bold text-slate-900 dark:text-white font-mono">${s.count} Albums</span>
+            <span class="text-[11px] text-slate-400 block font-mono">${formatBytes(s.size_bytes)}</span>
+          </div>
+        </div>
+      `).join('');
+
+      // Formats
+      document.getElementById('insights-formats-list').innerHTML = (formats || []).map(f => `
+        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-file-audio text-slate-400"></i>
+            <span class="text-xs font-bold font-mono text-slate-800 dark:text-slate-200 uppercase">${f.file_format}</span>
+          </div>
+          <div class="text-right">
+            <span class="text-sm font-bold text-slate-900 dark:text-white font-mono">${Number(f.count).toLocaleString()} tracks</span>
+            <span class="text-[11px] text-slate-400 block font-mono">${formatBytes(f.size_bytes)}</span>
+          </div>
+        </div>
+      `).join('');
+
+      // Top Artists
+      document.getElementById('insights-top-artists-grid').innerHTML = (topArtists || []).map((ar, i) => `
+        <div onclick="filterByArtist(${ar.id}, '${escapeHtml(ar.name)}')" class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 cursor-pointer hover:border-rose-500/40 transition-all group">
+          <span class="text-[10px] font-bold text-rose-500 uppercase tracking-widest font-mono">#${i + 1} Artist</span>
+          <h4 class="font-bold text-sm text-slate-900 dark:text-white truncate mt-1 group-hover:text-rose-600 transition-colors">${ar.name}</h4>
+          <p class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-1">${ar.album_count} Albums &bull; ${ar.track_count} Tracks</p>
+        </div>
+      `).join('');
+    }
+
+    // 5. ALBUM DETAIL MODAL
+    async function openAlbumModal(albumId) {
+      const modal = document.getElementById('album-modal');
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+
+      // Reset modal content while loading
+      document.getElementById('modal-album-title').textContent = 'Loading album...';
+      document.getElementById('modal-album-artist').textContent = '';
+      document.getElementById('modal-album-meta').textContent = '';
+      document.getElementById('modal-tracks-body').innerHTML = `
+        <tr><td colspan="6" class="text-center py-10 text-slate-400 font-mono text-xs"><i class="fa-solid fa-circle-notch fa-spin text-rose-500 text-lg mr-2"></i>Fetching tracklist...</td></tr>
+      `;
+
+      try {
+        const res = await fetch(`${API_BASE}/albums/${albumId}`);
+        const data = await res.json();
+        const { album, tracks } = data;
+
+        document.getElementById('modal-album-title').textContent = album.title;
+        document.getElementById('modal-album-artist').textContent = album.artist;
+
+        // Meta info
+        const metaParts = [];
+        if (album.year) metaParts.push(album.year);
+        metaParts.push(`${tracks.length} tracks`);
+        metaParts.push(formatBytes(album.total_size_bytes));
+        if (album.file_format) metaParts.push(album.file_format.toUpperCase());
+        document.getElementById('modal-album-meta').textContent = metaParts.join(' • ');
+
+        // Badges
+        document.getElementById('modal-album-quality-badge').innerHTML = getQualityBadge(album.quality, album.bit_depth, album.sample_rate_hz);
+        document.getElementById('modal-album-section-badge').textContent = `Section: ${(album.library_section || '').toUpperCase()}`;
+
+        // Drive Button
+        const driveBtn = document.getElementById('modal-album-drive-btn');
+        if (album.drive_url) {
+          driveBtn.href = album.drive_url;
+          driveBtn.classList.remove('hidden');
+        } else {
+          driveBtn.classList.add('hidden');
+        }
+
+        // Extras strip
+        const extrasStrip = document.getElementById('modal-album-extras-strip');
+        if (album.extra_files) {
+          extrasStrip.classList.remove('hidden');
+          extrasStrip.classList.add('flex');
+          document.getElementById('modal-album-extras-text').textContent = album.extra_files;
+          document.getElementById('modal-album-path').textContent = album.drive_path || '';
+        } else {
+          extrasStrip.classList.add('hidden');
+          extrasStrip.classList.remove('flex');
+        }
+
+        // Tracks Body
+        document.getElementById('modal-tracks-count').textContent = tracks.length;
+        document.getElementById('modal-tracks-body').innerHTML = tracks.map(t => `
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors">
+            <td class="py-2.5 px-3 text-center font-mono text-slate-400 font-bold">${t.track_number || '-'}</td>
+            <td class="py-2.5 px-3 font-semibold text-slate-900 dark:text-white">${t.title}</td>
+            <td class="py-2.5 px-3 text-slate-600 dark:text-slate-300">${t.track_artist || album.artist}</td>
+            <td class="py-2.5 px-3 text-center font-mono uppercase text-slate-500">${t.file_format}</td>
+            <td class="py-2.5 px-3 text-right font-mono text-slate-500">${formatBytes(t.size_bytes)}</td>
+            <td class="py-2.5 px-3 text-right">
+              ${t.drive_url ? `
+                <a href="${t.drive_url}" target="_blank" class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 font-semibold text-[11px] transition-colors">
+                  <i class="fa-brands fa-google-drive"></i>
+                  <span>Drive</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                </a>
+              ` : '-'}
+            </td>
+          </tr>
+        `).join('');
+
+      } catch (err) {
+        console.error('Fetch album details error:', err);
+      }
+    }
+
+    function closeAlbumModal() {
+      document.getElementById('album-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    // Close on Escape or click outside
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAlbumModal();
+      if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        document.getElementById('global-search-input').focus();
+      }
+    });
+
+    document.getElementById('album-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'album-modal') closeAlbumModal();
+    });
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    // Launch
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
